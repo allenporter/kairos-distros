@@ -1,0 +1,36 @@
+{
+    "extends": [
+      "config:base",
+    ],
+    "timezone": "America/Los_Angeles",
+    "assignees": ["allenporter"],
+    "dependencyDashboardTitle": "Renovate Dashboard",
+    "packageRules": [
+      {
+        "description": "Patches are automatic after 1 day",
+        "automerge": true,
+        "automergeType": "branch",
+        "stabilityDays": 1,
+        "additionalBranchPrefix": "prod-patch",
+        "matchUpdateTypes": ["patch"],
+      },
+      {
+        "description": "prod: Minor updates automerged weekly",
+        "automerge": true,
+        "extends": ["schedule:weekends"],
+        "additionalBranchPrefix": "prod-minor",
+        "stabilityDays": 1,
+        "matchUpdateTypes": ["minor"],
+      },
+      {
+        "description": "prod: Packages updated weekly",
+        "extends": ["schedule:weekends"],
+        "additionalBranchPrefix": "prod-",
+        "stabilityDays": 1,
+        "matchUpdateTypes": ["major", "minor"],
+      },
+    ],
+    "pre-commit": {
+      "enabled": true
+    },
+  }
