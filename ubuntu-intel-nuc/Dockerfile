@@ -7,6 +7,7 @@ ARG UBUNTU_VERSION=22.04
 
 # Full version is something like v2.4.3-k3sv1.28.2-k3s1
 ENV KAIROS_FULL_VERSION="${KAIROS_VERSION}-k3s${K3S_VERSION//-/+}"
+
 FROM quay.io/kairos/ubuntu:${UBUNTU_VERSION}-standard-amd64-generic-${KAIROS_FULL_VERSION}
 
 RUN apt-get update && \
