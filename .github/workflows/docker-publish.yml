@@ -12,12 +12,16 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_BASE: ${{ github.repository_owner }}
 
 
 jobs:
   build:
+    strategy:
+      matrix:
+        variant:
+        - ubuntu-intel-nuc
+        - ubuntu-nvidia
 
     runs-on: ubuntu-latest
     permissions:
@@ -48,12 +52,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5.0.0
         with:
           context: .
+          file: 
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
