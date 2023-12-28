@@ -11,13 +11,11 @@ ARG KAIROS_FULL_VERSION="${KAIROS_VERSION}-k3s${K3S_VERSION}"
 FROM quay.io/kairos/ubuntu:${UBUNTU_VERSION}-standard-amd64-generic-${KAIROS_FULL_VERSION}
 
 COPY rootfs/ /
+ADD https://nvidia.github.io/libnvidia-container/gpgkey /usr/share/keyrings/libnvidia-container-keyring.gpg
 
 RUN apt-get update && \
     apt-get install -y \
         wget=1.21.* \
-        && \
-    wget -O- https://nvidia.github.io/libnvidia-container/gpgkey | apt-key add - && \
-    apt-get install -y \
         nvidia-container-toolkit=1.14.3-1 \
         && \
     apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -1,1 +1,1 @@
-deb https://nvidia.github.io/libnvidia-container/stable/deb/$(ARCH) /
+deb [signed-by=/usr/share/keyrings/libnvidia-container-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/ubuntu22.04/$(ARCH) /
