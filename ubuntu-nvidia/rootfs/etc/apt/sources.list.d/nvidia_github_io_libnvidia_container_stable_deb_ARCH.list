@@ -1,1 +1,1 @@
-deb https://nvidia.github.io/libnvidia-container/stable/${distribution} /
+deb https://nvidia.github.io/libnvidia-container/stable/deb/$(ARCH) /
