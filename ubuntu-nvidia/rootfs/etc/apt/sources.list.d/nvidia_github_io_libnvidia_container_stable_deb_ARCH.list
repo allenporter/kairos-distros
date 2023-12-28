@@ -1,1 +1,1 @@
-deb https://nvidia.github.io/libnvidia-container/stable/${distribution}/nvidia-container-toolkit.list
+deb https://nvidia.github.io/libnvidia-container/stable/${distribution} /
