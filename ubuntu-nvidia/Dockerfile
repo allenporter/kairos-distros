@@ -10,7 +10,7 @@ ARG KAIROS_FULL_VERSION="${KAIROS_VERSION}-k3s${K3S_VERSION}"
 
 FROM quay.io/kairos/ubuntu:${UBUNTU_VERSION}-standard-amd64-generic-${KAIROS_FULL_VERSION}
 
-COPY ./rootfs/ /
+COPY rootfs/ /
 
 RUN apt-get update && \
     apt-get install -y \
