@@ -14,9 +14,12 @@ COPY rootfs/ /
 
 RUN apt-get update && \
     apt-get install -y \
-    wget=1.21.* \
-    nvidia-container-toolkit=1.14.3-1 \
-    && \
+        wget=1.21.* \
+        && \
+    wget -O- https://nvidia.github.io/libnvidia-container/gpgkey | apt-key add - && \
+    apt-get install -y \
+        nvidia-container-toolkit=1.14.3-1 \
+        && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure nvidia container runtime
