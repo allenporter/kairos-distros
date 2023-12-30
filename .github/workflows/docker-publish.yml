@@ -73,7 +73,7 @@ jobs:
         id: build-iso
         run: |
           ./AuroraBoot \
-            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test \
+            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test" \
             --set "disable_http_server=true" \
             --set "disable_netboot=true" \
             --set "state_dir=${GITHUB_WORKSPACE}" \
