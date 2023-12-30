@@ -54,8 +54,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}
       - name: Build Docker image and export
-        id: build-and-push
-        uses: docker/build-push-action@v5.0.0
+        id: build-image
+        uses: docker/build-push-action@v5.1.0
         with:
           context: ${{ matrix.variant }}
           load: true
@@ -64,6 +64,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Build iso from the container image
+        id: build-iso
         uses: docker://quay.io/kairos/auroraboot:v0.2.7
         with:
           args: >-
@@ -93,6 +94,7 @@ jobs:
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
       - name: Publish iso
         uses: actions/upload-artifact@v2
+        id: publish-iso
         if: ${{ github.event_name != 'pull_request' }}
         with:
           name: kairos-${{ matrix.variant }}-${{ steps.meta.outputs.version }}.iso
