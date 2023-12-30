@@ -67,7 +67,7 @@ jobs:
       - name: Build iso from the container image
         id: build-iso
         run: |
-          docker run --rm -ti \
+          docker run --rm \
             -v "/var/run/docker.sock:/var/run/docker.sock" \
             -v "${PWD}:/tmp/auroraboot" \
             quay.io/kairos/auroraboot:v${AURORABOOT_VERSION} \
