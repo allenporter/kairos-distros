@@ -53,7 +53,26 @@ jobs:
         uses: docker/metadata-action@v5.4.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}
-      - name: Build and push Docker image
+      - name: Build Docker image and export
+        id: build-and-push
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: ${{ matrix.variant }}
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build iso from the container image
+        uses: docker://quay.io/kairos/auroraboot:v0.2.7
+        with:
+          args: >-
+            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test
+            --set "disable_http_server=true"
+            --set "disable_netboot=true"
+            --set "state_dir=/github/workspace"
+            --debug
+      - name: Push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5.1.0
         with:
@@ -72,3 +91,9 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+      - name: Publish iso
+        uses: actions/upload-artifact@v2
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          name: kairos-${{ matrix.variant }}-${{ steps.meta.outputs.version }}.iso
+          path: ${{ github.workspace }}/build/kairos.iso.custom.iso
