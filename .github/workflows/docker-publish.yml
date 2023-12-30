@@ -13,7 +13,9 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_BASE: ${{ github.repository_owner }}
-
+  # renovate: datasource=github-releases depName=kairos-io/AuroraBoot
+  AURORABOOT_VERSION: 0.2.7
+  AURORABOOT_DOWNLOAD_URL: https://github.com/kairos-io/AuroraBoot/releases/download
 
 jobs:
   build:
@@ -34,6 +36,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Download AuroraBoot
+        run: |
+          curl -OL ${{ env.DOWNLOAD_URL }}/v${{ env.AURORABOOT_VERSION }}/AuroraBoot_${{ env.AURORABOOT_VERSION }}_linux_amd64.tar.gz
+          tar -xzf AuroraBoot_${{ env.AURORABOOT_VERSION }}_linux_amd64.tar.gz
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3.3.0
@@ -65,13 +71,12 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Build iso from the container image
         id: build-iso
-        uses: docker://quay.io/kairos/auroraboot:v0.2.7
-        with:
-          args: >-
-            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test
-            --set "disable_http_server=true"
-            --set "disable_netboot=true"
-            --set "state_dir=/github/workspace"
+        run: |
+          ./AuroraBoot \
+            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test \
+            --set "disable_http_server=true" \
+            --set "disable_netboot=true" \
+            --set "state_dir=${GITHUB_WORKSPACE}" \
             --debug
       - name: Push Docker image
         id: build-and-push
@@ -98,4 +103,4 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         with:
           name: kairos-${{ matrix.variant }}-${{ steps.meta.outputs.version }}.iso
-          path: ${{ github.workspace }}/build/kairos.iso.custom.iso
+          path: ${GITHUB_WORKSPACE}/build/kairos.iso.custom.iso
