@@ -68,8 +68,6 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Build iso from the container image
         id: build-iso
-        run: |
-          ./AuroraBoot
         uses: docker://quay.io/kairos/auroraboot:v0.2.7
         options: -v /var/run/docker.sock:/var/run/docker.sock
         with:
