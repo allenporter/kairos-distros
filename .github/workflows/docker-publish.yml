@@ -33,10 +33,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Download AuroraBoot
-        run: |
-          curl -OL ${{ env.DOWNLOAD_URL }}/v${{ env.AURORABOOT_VERSION }}/AuroraBoot_${{ env.AURORABOOT_VERSION }}_linux_amd64.tar.gz
-          tar -xzf AuroraBoot_${{ env.AURORABOOT_VERSION }}_linux_amd64.tar.gz
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3.3.0
