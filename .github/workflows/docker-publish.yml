@@ -15,7 +15,7 @@ env:
   IMAGE_BASE: ${{ github.repository_owner }}
   # renovate: datasource=github-releases depName=kairos-io/AuroraBoot
   AURORABOOT_VERSION: 0.2.7
-  AURORABOOT_DOWNLOAD_URL: https://github.com/kairos-io/AuroraBoot/releases/download
+  DOWNLOAD_URL: https://github.com/kairos-io/AuroraBoot/releases/download
 
 jobs:
   build:
