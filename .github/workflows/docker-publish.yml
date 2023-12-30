@@ -13,6 +13,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_BASE: ${{ github.repository_owner }}
+  # renovate: datasource=github-releases depName=kairos-io/AuroraBoot
+  AURORABOOT_VERSION: 0.2.7
 
 jobs:
   build:
@@ -68,11 +70,11 @@ jobs:
           docker run --rm -ti \
             -v "/var/run/docker.sock:/var/run/docker.sock" \
             -v "${PWD}:/tmp/auroraboot" \
-            quay.io/kairos/auroraboot:v0.2.7 \
-            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test
-            --set "disable_http_server=true"
-            --set "disable_netboot=true"
-            --set "state_dir=/tmp/auroraboot"
+            quay.io/kairos/auroraboot:v${AURORABOOT_VERSION} \
+            --set "container_image=docker://${{ env.IMAGE_BASE }}/kairos-${{ matrix.variant }}:test" \
+            --set "disable_http_server=true" \
+            --set "disable_netboot=true" \
+            --set "state_dir=/tmp/auroraboot" \
             --debug
       - name: Push Docker image
         id: build-and-push
