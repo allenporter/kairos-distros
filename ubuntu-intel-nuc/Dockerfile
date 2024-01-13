@@ -1,5 +1,5 @@
 # renovate: datasource=github-releases depName=kairos-io/kairos
-ARG KAIROS_VERSION=v2.4.3
+ARG KAIROS_VERSION=v2.5.0
 
 # Note currently renovated since it depends on Kairos support
 ARG K3S_VERSION=v1.28.2-k3s1
